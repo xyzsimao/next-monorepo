@@ -1,8 +1,12 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "!**/test/**"
+  - "!**/fixtures/**"
+  - "!**/temp/**"
+  - "!packages/tests/temp/**"
 
-allowBuilds:
-  sharp: true
-  unrs-resolver: true
-  msw: false
+# allowBuilds:
+#   sharp: true
+#   unrs-resolver: true
+#   msw: false
