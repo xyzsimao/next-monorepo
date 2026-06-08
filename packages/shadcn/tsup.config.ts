@@ -8,12 +8,12 @@ export default defineConfig({
     "src/index.ts",
     "src/registry/index.ts",
     "src/schema/index.ts",
-    // "src/mcp/index.ts",
+    "src/mcp/index.ts",
     "src/utils/index.ts",
     "src/icons/index.ts",
     "src/preset/index.ts",
   ],
-  format: ['esm', 'cjs'], // 输出格式
+  format: ["esm", "cjs"], // 输出格式
   sourcemap: true,
   minify: true,
   target: "esnext",
@@ -23,6 +23,6 @@ export default defineConfig({
   // module resolution failures with npx temporary installs.
   noExternal: ["@antfu/ni", "tinyexec"],
   onSuccess: async () => {
-    // copyFileSync("src/tailwind.css", "dist/tailwind.css")
+    copyFileSync("src/tailwind.css", "dist/tailwind.css")
   },
 })

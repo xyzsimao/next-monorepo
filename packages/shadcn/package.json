@@ -22,13 +22,32 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./registry": {
+      "types": "./dist/registry/index.d.ts",
+      "default": "./dist/registry/index.js"
+    },
     "./schema": {
       "types": "./dist/schema/index.d.ts",
       "default": "./dist/schema/index.js"
     },
+    "./mcp": {
+      "types": "./dist/mcp/index.d.ts",
+      "default": "./dist/mcp/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
     "./icons": {
       "types": "./dist/icons/index.d.ts",
       "default": "./dist/icons/index.js"
+    },
+    "./preset": {
+      "types": "./dist/preset/index.d.ts",
+      "default": "./dist/preset/index.js"
+    },
+    "./tailwind.css": {
+      "style": "./dist/tailwind.css"
     }
   },
   "keywords": [],
@@ -36,7 +55,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-   "@babel/core": "^7.28.0",
+    "@babel/core": "^7.28.0",
     "@babel/parser": "^7.28.0",
     "@babel/plugin-transform-typescript": "^7.28.0",
     "@babel/preset-typescript": "^7.27.1",
