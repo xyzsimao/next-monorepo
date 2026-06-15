@@ -1,20 +1,27 @@
+;
 /* eslint-disable react-hooks/static-components */
-import * as React from "react"
-import { type Metadata } from "next"
-import { notFound } from "next/navigation"
+import * as React from "react";
+import { type Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { siteConfig } from "@/lib/config"
-import {
-  getDemoItem,
-  getRegistryComponent,
-  getRegistryItem,
-} from "@/lib/registry"
-import { absoluteUrl } from "@/lib/utils"
-import { getStyle, legacyStyles, type Style } from "@/registry/_legacy-styles"
 
-import "@/styles/legacy-themes.css"
 
-import { ComponentPreview } from "./component-preview"
+import { siteConfig } from "@/lib/config";
+import { getDemoItem, getRegistryComponent, getRegistryItem } from "@/lib/registry";
+import { absoluteUrl } from "@/lib/utils";
+import { getStyle, legacyStyles, type Style } from "@/registry/_legacy-styles";
+
+
+
+
+
+
+import "@/styles/legacy-themes.css";
+
+
+
+import { ComponentPreview } from "./component-preview";
+
 
 export const revalidate = false
 export const dynamic = "force-static"
@@ -84,7 +91,7 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const { Index } = await import("@/registry/__index__")
-  // const { Index: BasesIndex } = await import("@/registry/bases/__index__")
+  const { Index: BasesIndex } = await import("@/registry/bases/__index__")
   const { ExamplesIndex } = await import("@/examples/__index__")
   const params: Array<{ style: string; name: string }> = []
 
@@ -107,26 +114,26 @@ export async function generateStaticParams() {
         }
       }
 
-      // // Add UI components from BasesIndex.
-      // const baseIndex = BasesIndex[baseName]
-      // if (baseIndex) {
-      //   for (const itemName in baseIndex) {
-      //     const item = baseIndex[itemName]
-      //     if (
-      //       [
-      //         "registry:block",
-      //         "registry:component",
-      //         "registry:example",
-      //         "registry:internal",
-      //       ].includes(item.type)
-      //     ) {
-      //       params.push({
-      //         style: style.name,
-      //         name: item.name,
-      //       })
-      //     }
-      //   }
-      // }
+      // Add UI components from BasesIndex.
+      const baseIndex = BasesIndex[baseName]
+      if (baseIndex) {
+        for (const itemName in baseIndex) {
+          const item = baseIndex[itemName]
+          if (
+            [
+              "registry:block",
+              "registry:component",
+              "registry:example",
+              "registry:internal",
+            ].includes(item.type)
+          ) {
+            params.push({
+              style: style.name,
+              name: item.name,
+            })
+          }
+        }
+      }
 
       continue
     }
@@ -154,7 +161,7 @@ export async function generateStaticParams() {
       }
     }
   }
-
+  // console.log(JSON.stringify(params, null, 2))
   return params
 }
 

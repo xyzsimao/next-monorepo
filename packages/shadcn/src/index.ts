@@ -5,6 +5,7 @@ import { info } from '@/src/commands/info';
 import packageJson from '../package.json';
 import { init } from '@/src/commands/init';
 import { add } from '@/src/commands/add';
+import { build } from "@/src/commands/build"
 
 process.on("SIGINT", () => process.exit(0))
 process.on("SIGTERM", () => process.exit(0))
@@ -30,10 +31,7 @@ async function main() {
       "display the version number"
     )
   //program.command('hello').description('Say hello').action(() => console.log('Hello from my-cli!'));
-  program
-    .addCommand(init)
-    .addCommand(add)
-    .addCommand(info);
+  program.addCommand(init).addCommand(add).addCommand(build).addCommand(info)
 
   program.parse();
 }

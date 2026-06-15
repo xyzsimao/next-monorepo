@@ -1,22 +1,23 @@
-import { spawn } from "child_process"
-import { promises as fs } from "fs"
-import path from "path"
-import { rimraf } from "rimraf"
-import { registrySchema, type RegistryItem } from "shadcn/schema"
-import {
-  createStyleMap,
-  transformDirection,
-  transformIcons,
-  transformStyle,
-} from "shadcn/utils"
-import { Project, ScriptKind } from "ts-morph"
+import { spawn } from "child_process";
+import { promises as fs } from "fs";
+import path from "path";
+import { rimraf } from "rimraf";
+import { registrySchema, type RegistryItem } from "shadcn/schema";
+import { createStyleMap, transformDirection, transformIcons, transformStyle } from "shadcn/utils";
+import { Project, ScriptKind } from "ts-morph";
 
-import { getAllBlocks } from "@/lib/blocks"
-import { legacyStyles } from "@/registry/_legacy-styles"
-import { BASE_COLORS } from "@/registry/base-colors"
-import { BASES, type Base } from "@/registry/bases"
-import { PRESETS } from "@/registry/config"
-import { STYLES } from "@/registry/styles"
+
+
+import { getAllBlocks } from "@/lib/blocks";
+import { legacyStyles } from "@/registry/_legacy-styles";
+import { BASE_COLORS } from "@/registry/base-colors";
+import { BASES, type Base } from "@/registry/bases";
+import { PRESETS } from "@/registry/config";
+import { STYLES } from "@/registry/styles";
+
+
+
+
 
 // This is a list of styles that we want to check into tracking.
 // This is used by the v4 site.
@@ -48,71 +49,71 @@ function getStylesToBuild() {
 try {
   const totalStart = performance.now()
 
-  console.log("🏗️ Building bases...")
-  await buildBasesIndex(Array.from(BASES))
-  await buildBases(Array.from(BASES))
+  // console.log("🏗️ Building bases...")
+  //   await buildBasesIndex(Array.from(BASES))
+  //   await buildBases(Array.from(BASES))
 
-  // Format base files before building styles so the JSON output contains formatted code.
-  const baseDirs = Array.from(BASES).flatMap((base) =>
-    STYLES.map((style) =>
-      path.join(process.cwd(), `registry/${base.name}-${style.name}`)
+  //   // Format base files before building styles so the JSON output contains formatted code.
+  //   const baseDirs = Array.from(BASES).flatMap((base) =>
+  //     STYLES.map((style) =>
+  //       path.join(process.cwd(), `registry/${base.name}-${style.name}`)
+  //     )
+  //   )
+  //   console.log("\n✨ Formatting base files...")
+  //   await batchPrettier(baseDirs)
+
+    const stylesToBuild = getStylesToBuild()
+
+  //   // Build index for legacy styles and whitelisted base-style combinations.
+  //   console.log(`📦 Building registry/__index__.tsx...`)
+  //   const stylesForIndex = WHITELISTED_STYLES.map((name) => ({
+  //     name,
+  //     title: name,
+  //   }))
+  //   await buildRegistryIndex(stylesForIndex)
+
+    console.log("💅 Building styles...")
+    // Build all styles in parallel.
+    await Promise.all(
+      stylesToBuild.map(async (style) => {
+        await buildRegistryJsonFile(style.name)
+        await buildRegistry(style.name)
+        console.log(`   ✅ ${style.name}`)
+      })
     )
-  )
-  console.log("\n✨ Formatting base files...")
-  await batchPrettier(baseDirs)
 
-  const stylesToBuild = getStylesToBuild()
+    console.log("\n🗂️ Building registry/__blocks__.json...")
+    await buildBlocksIndex()
 
-  // Build index for legacy styles and whitelisted base-style combinations.
-  console.log(`📦 Building registry/__index__.tsx...`)
-  const stylesForIndex = WHITELISTED_STYLES.map((name) => ({
-    name,
-    title: name,
-  }))
-  await buildRegistryIndex(stylesForIndex)
+    console.log("\n⚙️ Building public/r/config.json...")
+    await buildConfig()
 
-  console.log("💅 Building styles...")
-  // Build all styles in parallel.
-  await Promise.all(
-    stylesToBuild.map(async (style) => {
-      await buildRegistryJsonFile(style.name)
-      await buildRegistry(style.name)
-      console.log(`   ✅ ${style.name}`)
-    })
-  )
+    // Copy UI to examples before cleanup.
+    console.log("\n📋 Copying UI to examples...")
+    await copyUIToExamples()
 
-  console.log("\n🗂️ Building registry/__blocks__.json...")
-  await buildBlocksIndex()
+    // Build RTL variants of examples.
+    console.log("\n🔄 Building RTL examples...")
+    await buildRtlExamples()
 
-  console.log("\n⚙️ Building public/r/config.json...")
-  await buildConfig()
+    console.log("\n📦 Building public/r/index.json...")
+    await buildIndex()
 
-  // Copy UI to examples before cleanup.
-  console.log("\n📋 Copying UI to examples...")
-  await copyUIToExamples()
+    console.log("\n📋 Building public/r/registries.json...")
+    await buildRegistriesJson()
 
-  // Build RTL variants of examples.
-  console.log("\n🔄 Building RTL examples...")
-  await buildRtlExamples()
+    console.log("\n🎨 Building public/r/colors...")
+    await buildColors()
 
-  console.log("\n📦 Building public/r/index.json...")
-  await buildIndex()
+    // Batch format all collected files with prettier at the end.
+    if (prettierPaths.length > 0) {
+      console.log(`\n✨ Formatting ${prettierPaths.length} files...`)
+      await batchPrettier(prettierPaths)
+    }
 
-  console.log("\n📋 Building public/r/registries.json...")
-  await buildRegistriesJson()
-
-  console.log("\n🎨 Building public/r/colors...")
-  await buildColors()
-
-  // Batch format all collected files with prettier at the end.
-  if (prettierPaths.length > 0) {
-    console.log(`\n✨ Formatting ${prettierPaths.length} files...`)
-    await batchPrettier(prettierPaths)
-  }
-
-  // Clean up intermediate files and generated base directories.
-  console.log("\n🧹 Cleaning up...")
-  await cleanUp(stylesToBuild)
+    // Clean up intermediate files and generated base directories.
+    console.log("\n🧹 Cleaning up...")
+    await cleanUp(stylesToBuild)
 
   const elapsed = ((performance.now() - totalStart) / 1000).toFixed(2)
   console.log(`\n✅ Build complete in ${elapsed}s!`)
@@ -264,7 +265,7 @@ async function buildBases(bases: Base[]) {
       combinations.push({ base, style, baseRegistry, registryItems, styleMap })
     }
   }
-
+  // console.log(JSON.stringify(combinations, null, 2))
   await Promise.all(
     combinations.map(
       async ({ base, style, baseRegistry, registryItems, styleMap }) => {

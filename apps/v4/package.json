@@ -4,12 +4,17 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter=shadcn build && pnpm icons:dev & next dev --turbopack --port 4000",
+    "icons:dev": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/build-icons.ts --watch",
+    "dev2": "pnpm --filter=shadcn build && pnpm icons:dev & next dev --turbopack --port 4000",
+    "dev": " next dev  ",
     "build": "pnpm --filter=shadcn build && next build",
     "start": "next start",
     "registry:build": "bun run ./scripts/build-registry.mts && pnpm examples:build && prettier --log-level silent --write \"registry/**/*.{ts,tsx,json,mdx}\" \"examples/**/*.{ts,tsx}\" --cache",
     "registry": "bun run ./scripts/build-registry.mts",
     "lint": "eslint",
+    "registry:capture": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/capture-registry.mts",
+    "explore:capture": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/capture-explore.mts",
+    "examples:build": "bun run ./scripts/build-examples.ts && prettier --log-level silent --write \"examples/**/*.{ts,tsx}\" --cache",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },

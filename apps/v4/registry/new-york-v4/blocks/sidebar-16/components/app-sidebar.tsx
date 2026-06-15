@@ -1,32 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import {
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+import * as React from "react";
+import { BookOpen, Bot, Command, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal } from "lucide-react";
 
-import { NavMain } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-main"
-import { NavProjects } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-projects"
-import { NavSecondary } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-secondary"
-import { NavUser } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-user"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/registry/new-york-v4/ui/sidebar"
+
+
+import { NavMain } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-main";
+import { NavProjects } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-projects";
+import { NavSecondary } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-secondary";
+import { NavUser } from "@/registry/new-york-v4/blocks/sidebar-16/components/nav-user";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/registry/new-york-v4/ui/sidebar";
+
+
+
+
 
 const data = {
   user: {
@@ -115,7 +102,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Limits",
+          title: "Limits2",
           url: "#",
         },
       ],

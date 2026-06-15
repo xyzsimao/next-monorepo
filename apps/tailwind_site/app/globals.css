@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+
+@import "./search.css";
+@import "./typography.css" layer(components);
+:root {
+  color-scheme: light dark;
+}
+.dark {
+  color-scheme: dark;
+}
+.light {
+  color-scheme: light;
+}
+
+@variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(.system, .system *) {
+      @slot;
+    }
+  }
+}
+
+@variant not-dark {
+  &:not(:where(.dark, .dark *)) {
+    @media not (prefers-color-scheme: dark) {
+      @slot;
+    }
+
+    &:not(:where(.system, .system *)) {
+      @slot;
+    }
+  }
+}
+
+
+@theme {
+  --animate-flash-code: flash-code 2s forwards;
+
+  /* This uses --color-sky-500 but it's inlined because of a bug in chrome */
+  @keyframes flash-code {
+    0% {
+      background-color: oklch(0.685 0.169 237.323 / 10%);
+    }
+
+    100% {
+      background-color: oklch(0.685 0.169 237.323 / 0%);
+    }
+  }
+}

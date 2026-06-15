@@ -1,9 +1,12 @@
-import { existsSync, mkdirSync } from "fs"
-import path from "path"
-import puppeteer from "puppeteer"
-import { decodePreset } from "shadcn/preset"
+import { existsSync, mkdirSync } from "fs";
+import path from "path";
+import puppeteer from "puppeteer";
+import { decodePreset } from "shadcn/preset";
 
-import { EXPLORE_PRESETS } from "../lib/explore"
+
+
+import { EXPLORE_PRESETS } from "../lib/explore";
+
 
 const PRESETS_PATH = path.join(process.cwd(), "public/presets")
 const force = process.argv.includes("--force")
@@ -31,6 +34,8 @@ async function captureScreenshots() {
   }
 
   const browser = await puppeteer.launch({
+    executablePath:
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     defaultViewport: {
       width: 1280,
       height: 720,
